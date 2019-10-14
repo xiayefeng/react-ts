@@ -10,7 +10,10 @@ let octalLiteral: number = 0o744
 // 字符串
 let name: string = 'bob'
 name = 'smith'
-
+function aa (a: boolean, b: number, c: number, d: number, f: number, g: string) : void{
+  console.log(a, b, c, d, f, g)
+}
+aa(isDone, decLiteral, hexLiteral, binaryLiteral, octalLiteral, name )
 // 数组
 let list: number[] = [1, 2, 3, 4]
 
@@ -20,6 +23,8 @@ let list2: Array<number> = [1, 2, 3]
 let x: [string, number]
 
 x = ['hello', 10]
+console.log(x)
+
 
 // 枚举
 
@@ -36,6 +41,7 @@ enum Color2 {
   Blue
 }
 let c2: Color2 = Color2.Green
+console.log(c, c2)
 
 enum Color3 {
   Red = 1,
@@ -63,11 +69,14 @@ notSure.toFixed() // okay, toFixed exists (but the compiler doesn't check)
 
 let prettySure: Object = 4
 // prettySure.toFixed(); // Error: Property 'toFixed' doesn't exist on type 'Object'.
+console.log(prettySure)
 
 // Void void类型像是与any类型相反，它表示没有任何类型
-function warnUser(): void {
-  console.log('This is my warning message')
+function warnUser(a: any): void {
+  console.log('This is my warning message' + a)
 }
+
+warnUser('a')
 
 let unusable: void = undefined
 
@@ -76,6 +85,7 @@ let unusable: void = undefined
 let u: undefined = undefined
 let n: null = null
 
+warnUser([unusable, u, n])
 // Never never类型表示的是那些永不存在的值的类型。 例如， never类型是那些总是会抛出异常或根本就不会有返回值的函数表达式或箭头函数表达式的返回值类型； 变量也可能是 never类型，当它们被永不为真的类型保护所约束时。
 
 // 返回never的函数必须存在无法达到的终点
@@ -88,10 +98,18 @@ function fail() {
   return error('Something failed')
 }
 
+try{
+  fail()
+}catch(err) {
+  console.log(err)
+}
+
 // 返回never的函数必须存在无法达到的终点
 function infiniteLoop(): never {
   while (true) {}
 }
+
+// infiniteLoop()
 
 // Object object表示非原始类型，也就是除number，string，boolean，symbol，null或undefined之外的类型。
 
@@ -102,15 +120,15 @@ create(null) */
 // 类型断言
 let someValue: any = 'this is a string'
 
-let strLength: number = (<string>someValue).length // jsx不能用
+// let strLength: number = (<string>someValue).length // jsx不能用
 let strLength2: number = (someValue as string).length
-console.log(strLength)
 console.log(strLength2)
 
 type C = { a: string; b?: number }
 function f({ a, b }: C): void {
   // ...
 }
+f({a: '1', b: 2})
 
 // 接口
 function printLabel(labelledObj: { label: string }) {
@@ -155,6 +173,7 @@ interface Point {
 
 let p1: Point = { x: 10, y: 20 }
 // p1.x = 5; // error!
+console.log(p1)
 
 // TypeScript具有 ReadonlyArray <T>类型，它与Array<T>相似，只是把所有可变方法去掉了，因此可以确保数组创建后再也不能被修改：
 
@@ -191,6 +210,8 @@ let animal = new Animal('Goat')
 let rhino = new Rhino()
 let employee = new Employee('Bob')
 
+console.log(animal, employee)
+
 // 理解 protected
 class Person {
   protected name: string
@@ -222,14 +243,14 @@ animal = rhino
 let passcode = 'secret passcode'
 
 class Employee3 {
-  private _fullName: string
+  private _fullName: string = ''
 
   get fullName(): string {
     return this._fullName
   }
 
   set fullName(newName: string) {
-    if (passcode && passcode == 'secret passcode') {
+    if (passcode && passcode === 'secret passcode') {
       this._fullName = newName
     } else {
       console.log('Error: Unauthorized update of employee!')
@@ -246,14 +267,14 @@ if (employee3.fullName) {
 let passcode2 = 'secret passcode'
 
 class Employee4 {
-  private _fullName: string
+  private _fullName: string = ''
 
   get fullName(): string {
     return this._fullName
   }
 
   set fullName(newName: string) {
-    if (passcode2 && passcode2 == 'secret passcode') {
+    if (passcode2 && passcode2 === 'secret passcode') {
       this._fullName = newName
     } else {
       console.log('Error: Unauthorized update of employee!')
@@ -369,7 +390,11 @@ function add(x: number, y: number): number {
   return x + y;
 }
 
+add(5, 6)
+
 let myAdd = function(x: number, y: number): number { return x + y; };
+
+myAdd(5, 6)
 
 let myAdd2: (x: number, y: number) => number = function(
   x: number,
@@ -377,6 +402,7 @@ let myAdd2: (x: number, y: number) => number = function(
 ): number {
   return x + y
 }
+myAdd2(5, 6)
 
 function buildName2(firstName: string, lastName: string) {
   return firstName + " " + lastName;
@@ -399,6 +425,7 @@ function buildName(firstName: string, lastName?: string) {
 let result1 = buildName("Bob");  // works correctly now
 // let result2 = buildName("Bob", "Adams", "Sr.");  // error, too many parameters
 let result3 = buildName("Bob", "Adams");  // ah, just right
+console.log(result1, result3)
 
 function buildName3(firstName: string, lastName = "Smith") {
   return firstName + " " + lastName;
@@ -408,6 +435,7 @@ let result7 = buildName3("Bob");                  // works correctly now, return
 let result8 = buildName3("Bob", undefined);       // still works, also returns "Bob Smith"
 // let result9 = buildName("Bob", "Adams", "Sr.");  // error, too many parameters
 let result0 = buildName3("Bob", "Adams");         // ah, just right
+console.log(result7, result8, result0)
 
 function buildName4(firstName = "Will", lastName: string) {
   return firstName + " " + lastName;
@@ -417,6 +445,7 @@ function buildName4(firstName = "Will", lastName: string) {
 // let result12 = buildName4("Bob", "Adams", "Sr.");  // error, too many parameters
 let result13 = buildName4("Bob", "Adams");         // okay and returns "Bob Adams"
 let result14 = buildName4(undefined, "Adams");     // okay and returns "Will Adams"
+console.log(result13, result14)
 
 // 剩余参数
 
