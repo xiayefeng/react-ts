@@ -41,7 +41,7 @@ class App extends React.Component<Object, IState>{
                    list.push({
                        name: value,
                        age: 10,
-                       id: list.slice(-1)[0].id + 1
+                       id: list.slice(-1).length > 0 ? list.slice(-1)[0].id + 1 : 0
                    })
                    this.setState({
                        list,

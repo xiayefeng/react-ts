@@ -1,5 +1,4 @@
 import * as React from 'react'
-import {FriendItem} from "../types";
 
 interface onAdd {
     (index: string) : void
