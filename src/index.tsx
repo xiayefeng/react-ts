@@ -1,13 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
-import obj from './test/test'
-import obj2 from './test/test1'
+import App from './App3';
+// import obj from './test/test'
+// import obj2 from './test/test1'
 import * as serviceWorker from './serviceWorker';
 
-console.log(obj.list)
-console.log(obj2.list)
+// console.log(obj.list)
+// console.log(obj2.list)
 ReactDOM.render(<App />, document.getElementById('root'));
 
 // If you want your app to work offline and load faster, you can change

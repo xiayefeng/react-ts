@@ -108,7 +108,7 @@ class Animal {
 }
 
 class Snake extends Animal {
-  constructor(name: string) {super(name)}
+  // constructor(name: string) {super(name)}
   move(distanceInMeters = 5) {
     console.log('slithering...')
     super.move(distanceInMeters)
@@ -116,7 +116,7 @@ class Snake extends Animal {
 }
 
 class Horse extends Animal {
-  constructor(name: string) {super(name)}
+  // constructor(name: string) {super(name)}
   move(distanceInMeters = 45) {
     console.log('Galloping...')
     super.move(distanceInMeters)

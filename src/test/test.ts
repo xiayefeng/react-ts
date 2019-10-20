@@ -285,7 +285,7 @@ class Employee4 {
 let employee4 = new Employee4()
 employee4.fullName = 'Bob Smith7'
 if (employee4.fullName) {
-  alert(employee4.fullName)
+  console.log(employee4.fullName)
 }
 
 abstract class Department {
