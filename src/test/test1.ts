@@ -535,3 +535,316 @@ enum Direction {
   Right,
 }
 console.log(Direction[1]);
+
+enum ShapeKind {
+  Circle,
+  Square,
+}
+
+interface Circle {
+  kind: ShapeKind.Circle;
+  radius: number;
+  [index: string]: any;
+}
+
+interface Square {
+  kind: ShapeKind.Square;
+  sideLength: number;
+}
+
+let cc: Circle = {
+  kind: ShapeKind.Circle,
+  radius: 100,
+  width: 53,
+};
+
+console.log(cc);
+
+enum EventType {
+  Mouse,
+  Keyboard,
+}
+
+interface Event {
+  timestamp: number;
+}
+
+interface MouseEvent extends Event {
+  x: number;
+  y: number;
+}
+
+interface KeyEvent extends Event {
+  keyCode: number;
+}
+
+function listenEvent(EventType: EventType, handler: (n: Event) => void) {}
+
+listenEvent(EventType.Mouse, (e: Event) =>
+  console.log((e as MouseEvent).x + "," + (e as MouseEvent).y)
+);
+
+listenEvent(EventType.Mouse, ((e: MouseEvent) =>
+  console.log(e.x + "," + e.y)) as (e: Event) => void);
+
+// listenEvent(EventType.Mouse, (e: number) => console.log(e));
+function invokeLater(args: any[], callback: (...args: any[]) => void) {
+  /* ... Invoke callback with 'args' ... */
+}
+
+invokeLater([1, 2], (x, y) => console.log(x + ", " + y));
+invokeLater([1, 2], (x?, y?) => console.log(x + ", " + y));
+
+/* function extend <T, U> (first: T, second: U) : T & U {
+  let result = {} as T & U
+  for(let id in first){
+    (result as any)[id] = (first as any)[id]
+  }
+  for(let id in second){
+    if(!result.hasOwnProperty(id)){
+      (result as any)[id] = (second as any)[id]
+    }
+  }
+  return result
+} */
+class myType {}
+
+function extend<First extends myType, Second extends myType>(
+  first: First,
+  second: Second
+): First & Second {
+  const result: Partial<First & Second> = {};
+  for (const prop in first) {
+    if (first.hasOwnProperty(prop)) {
+      (result as First)[prop] = first[prop];
+    }
+  }
+  for (const prop in second) {
+    if (second.hasOwnProperty(prop)) {
+      (result as Second)[prop] = second[prop];
+    }
+  }
+  return result as First & Second;
+}
+
+class Person3 extends myType {
+  constructor(public name: string) {
+    super();
+  }
+}
+interface Loggable {
+  log(): void;
+}
+class ConsoleLogger extends myType implements Loggable {
+  age: number;
+  constructor() {
+    super();
+    this.age = 18;
+  }
+  log() {
+    // ...
+    console.log("ddddsafas");
+  }
+}
+var jim = extend(new Person3("Jim"), new ConsoleLogger());
+var n = jim.name;
+// jim.log();
+console.log(n);
+
+function padLeft(value: string, padding: string | number): string {
+  var str: string = "";
+  if (typeof padding === "number") {
+    str = Array(padding + 1).join(" ") + value;
+  }
+  if (typeof padding === "string") {
+    str = padding + value;
+  }
+  return str;
+}
+
+console.log(padLeft("dd", 1));
+
+interface Bird {
+  fly(): void;
+  layEggs(): void;
+}
+
+interface Fish {
+  swim(): void;
+  layEggs(): void;
+}
+
+function getSmallPet(): Fish | Bird {
+  return {
+    swim() {
+      console.log(111);
+    },
+    layEggs() {
+      console.log(222);
+    },
+  };
+}
+
+let pet = getSmallPet();
+pet.layEggs();
+// pet.swim()
+// (pet as Fish).swim();
+// (pet as Bird).fly()
+
+function isFish(pet: Fish | Bird): pet is Fish {
+  return (pet as Fish).swim !== undefined;
+}
+if (isFish(pet)) {
+  pet.swim();
+} else {
+  pet.fly();
+}
+
+function fixed(name: string | null): string {
+  function postfix(epithet: string) {
+    return name!.charAt(0) + ". the " + epithet;
+  }
+  name = name || "Bob";
+  return postfix("great");
+}
+console.log(fixed("aaa"));
+
+type LinkedList<T> = T & { next: LinkedList<T> };
+
+interface Person4 {
+  name: string;
+}
+
+// eslint-disable-next-line
+var people: LinkedList<Person4>;
+
+type Alias = { num: number };
+interface Interface {
+  num: number;
+}
+
+declare function aliased(arg: Alias): Alias;
+declare function interfaced(arg: Interface): Interface;
+
+interface Square2 {
+  kind: "square";
+  size: number;
+}
+
+interface Rectangle2 {
+  kind: "rectangle";
+  width: number;
+  height: number;
+}
+
+interface Circle2 {
+  kind: "circle";
+  radius: number;
+}
+
+type Shape2 = Square2 | Rectangle2 | Circle2;
+function area(s: Shape2) {
+  switch (s.kind) {
+    case "square":
+      return s.size * s.size;
+    case "rectangle":
+      return s.height * s.width;
+    case "circle":
+      return Math.PI * s.radius ** 2;
+    default:
+      return assertNever(s);
+  }
+}
+
+console.log(area({ kind: "circle", radius: 10 }));
+
+function assertNever(x: never): never {
+  throw new Error("Unexpected object: " + x);
+}
+
+class BasicCalculator {
+  constructor(protected value: number = 0) {}
+  currentValue(): number {
+    return this.value;
+  }
+  add(operand: number): this {
+    this.value += operand;
+    return this;
+  }
+  multiply(operand: number): this {
+    this.value *= operand;
+    return this;
+  }
+}
+
+let v = new BasicCalculator(2).multiply(5).add(8).currentValue();
+console.log(v);
+
+class ScientificCalculator extends BasicCalculator {
+  constructor(value = 0) {
+    super(value);
+  }
+  sin(): this {
+    this.value = Math.sin(this.value);
+    return this;
+  }
+}
+
+let v2 = new ScientificCalculator(2).multiply(5).sin().add(1).currentValue();
+console.log(v2);
+
+function pluck<T, K extends keyof T>(o: T, names: K[]): T[K][] {
+  return names.map((n) => o[n]);
+}
+
+interface Person5 {
+  name: string;
+  age: number;
+  address: string;
+}
+
+let person: Person5 = {
+  name: "jarid",
+  age: 35,
+  address: "dasfd",
+};
+
+let strings: string[] = pluck(person, ["name", "address"]);
+console.log(strings);
+
+function getProperty<T, K extends keyof T>(o: T, name: K): T[K] {
+  return o[name];
+}
+
+let name: string = getProperty(person, "name");
+let age: number = getProperty(person, "age");
+console.log(name, age);
+
+type Readonly<T> = {
+  readonly [P in keyof T]: T[P];
+};
+
+type Partial<T> = {
+  [p in keyof T]?: T[p];
+};
+
+type Pick<T, K extends keyof T> = {
+  [P in K]: T[P];
+};
+type Record<K extends string, T> = {
+  [P in K]: T;
+};
+
+type ThreeStringProps = Record<"prop1" | "prop2" | "prop3", string>;
+
+/* 
+Exclude<T, U> -- 从T中剔除可以赋值给U的类型。
+Extract<T, U> -- 提取T中可以赋值给U的类型。
+NonNullable<T> -- 从T中剔除null和undefined。
+ReturnType<T> -- 获取函数返回值类型。
+InstanceType<T> -- 获取构造函数类型的实例类型。
+ */
+type T00 = Exclude<"a" | "b" | "c" | "d", "a" | "c" | "f">;
+type T01 = Extract<"a" | "b" | "c" | "d", "a" | "c" | "f">;
+let str8: T00 = "b";
+console.log(str8);
